@@ -45,11 +45,14 @@ function id(id){return document.getElementById(id)}
 
 let input = id("numInput");
 let out = id("output");
+
 function convert() {
     let value = input.value;
-    console.log(value);
+    go(value, 0);
+}
+function go(val, type) {
+    let value = val.toString();
     let string = value.split("");
-    console.log(string);
     output = "";
     if (value >= 1 && value <= 19) { // 1 - 19
         output = single[value];
@@ -124,7 +127,6 @@ function convert() {
     else if (string.length == 6) { // 10000 - 99999
         output = single[string[0]] + " " + abr[0];
         let tem = string[1] + string[2];
-        console.log(tem);
         if (string[1] == 0) tem = string[2];
         if (tem >= 1 && tem <= 19) {
             add(" " + single[tem] + " " + abr[1]);
@@ -162,10 +164,48 @@ function convert() {
     else {
         output = "UNKNOWN/INVALID INPUT";
     }
-    console.log(output, output.length);
-    out.innerHTML = output + ", Length: " + output.length
+    if (type == 0) {
+        out.innerHTML = output + ", Length: " + output.length;
+    }
+    else if (type == 1) {
+        return output;   
+    }
 }
 
 function add (data) {
     output += data;
+}
+
+function getLong() {
+    let range = input.value;
+    let longest = [];
+    let object = {
+        num: 0,
+        word: "",
+        length: 0   
+    };
+    
+    for (let i = 1; i <= range; i++) {
+        let val = go(i, 1);
+        //console.log(val);
+        if (val.length > object.length) {
+            longestNum = val.length;
+            object = {
+                num: i,
+                word: val,
+                length: val.length
+            }
+        }
+        if (val.length == 64) {
+            let obj = {
+                num: i,
+                word: val,
+                length: val.length
+            }
+            longest.push(obj);
+        }
+    }
+    out.innerHTML = "Longest: " + object.word + ", Length: " + object.length + "<br>" + "Alternative numbers with equal length: " + longest.length;
+    console.log(longest);
+    console.log(object);
 }
